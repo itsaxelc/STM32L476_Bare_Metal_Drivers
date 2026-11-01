@@ -10,7 +10,7 @@ Written in C, with no HAL and no vendor libraries. Built with CMake and the GNU 
 - **SPI1** driver
 - **USART1 / USART2** drivers (USART2 tested over the ST-Link virtual COM port)
 - **MPU9250** driver (accelerometer, gyroscope, temperature) and **AK8963** magnetometer driver
-- **BME280** driver (temperature, pressure, humidity) <!-- TODO: precise the bus used (I2C / SPI) -->
+- **BME280** driver (temperature, pressure, humidity) over I2C
 - **LCD1602** driver over I2C, used as the validation target for the I2C driver
 - **Selectable pin mapping**: I2C1, I2C2 and SPI1 can be initialized on any of their supported pin combinations by passing an enum
 - Reproducible build with CMake presets and Ninja
@@ -188,7 +188,7 @@ int main(void)
 }
 ```
 
-Open the board's COM port in a serial terminal (<!-- TODO: baud rate -->) to see the output.
+Open the board's COM port in a serial terminal (115200) to see the output.
 
 
 **Cédric Compaoré** ([@itsaxelc](https://github.com/itsaxelc)), Aerospace Engineering student at ENSA Safi.
