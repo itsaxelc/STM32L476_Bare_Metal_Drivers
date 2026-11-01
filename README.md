@@ -1,6 +1,6 @@
 # Communication Protocols
 
-Bare-metal drivers for the main serial communication protocols (I2C, SPI, UART) on the **STM32L476RG**, with peripheral drivers built on top of them: an **MPU9250** 9-axis IMU (with its **AK8963** magnetometer) and an **LCD1602** character display (I2C backpack).
+Bare-metal drivers for the main serial communication protocols (I2C, SPI, UART) on the **STM32L476RG**, with sensor and peripheral drivers built on top of them: an **MPU9250** 9-axis IMU (with its **AK8963** magnetometer), a **BME280** environmental sensor and an **LCD1602** character display (I2C backpack).
 
 Written in C, with no HAL and no vendor libraries. Built with CMake and the GNU Arm Embedded toolchain.
 
@@ -10,6 +10,7 @@ Written in C, with no HAL and no vendor libraries. Built with CMake and the GNU 
 - **SPI1** driver
 - **USART1 / USART2** drivers (USART2 tested over the ST-Link virtual COM port)
 - **MPU9250** driver (accelerometer, gyroscope, temperature) and **AK8963** magnetometer driver
+- **BME280** driver (temperature, pressure, humidity) over I2C
 - **LCD1602** driver over I2C, used as the validation target for the I2C driver
 - **Selectable pin mapping**: I2C1, I2C2 and SPI1 can be initialized on any of their supported pin combinations by passing an enum
 - Reproducible build with CMake presets and Ninja
@@ -23,7 +24,8 @@ Written in C, with no HAL and no vendor libraries. Built with CMake and the GNU 
 | MCU | STM32L476RG (Cortex-M4F) |
 | Debugger | On-board ST-Link |
 | Display | LCD1602 with I2C backpack |
-| Sensor | MPU9250 (I2C) |
+| IMU | MPU9250 (I2C) |
+| Environmental sensor | BME280 |
 
 ## Pin selection
 
@@ -61,20 +63,28 @@ On the NUCLEO-L476RG, USART2 (PA2/PA3) is connected to the ST-Link virtual COM p
 
 ## Project structure
 
+The drivers are split in two groups: the **communication protocols** (the low-level buses) and the **sensor drivers** (the devices that sit on top of those buses).
+
 ```
 Communication_Protocols/
-├── I2C/                     I2C1, I2C2, I2C3 drivers
-├── SPI/                     SPI1 driver
-├── UART/                    USART1, USART2 drivers
-├── MPU9250_driver/          MPU9250 and AK8963 drivers (use I2C1)
-├── lcd1602_driver/          LCD1602 driver (uses I2C1)
-├── examples/                Example applications (one file per example)
-├── system.c                 System initialization
-├── startup_stm32l476xx.s    Startup code and vector table
-├── STM32L476RGTx_FLASH.ld   Linker script
-├── gcc-arm-none-eabi.cmake  CMake toolchain file
-├── CMakeLists.txt           Build configuration
-└── CMakePresets.json        Build presets
+├── .vscode/                     VS Code debug configuration (Cortex-Debug + OpenOCD)
+├── Communication protocols/     Low-level bus drivers
+│   ├── I2C/                     I2C1, I2C2, I2C3 drivers
+│   ├── SPI/                     SPI1 driver
+│   └── UART/                    USART1, USART2 drivers
+├── Sensors drivers/             Drivers for external sensors and peripherals
+│   ├── BME280/                  BME280 driver
+│   ├── MPU9250_driver/          MPU9250 and AK8963 drivers (use I2C1)
+│   └── lcd1602_driver/          LCD1602 driver (uses I2C1)
+├── examples/                    Example applications (one file per example)
+├── .gitignore
+├── CMakeLists.txt               Build configuration
+├── CMakePresets.json            Build presets
+├── README.md
+├── STM32L476RGTx_FLASH.ld       Linker script
+├── gcc-arm-none-eabi.cmake      CMake toolchain file
+├── startup_stm32l476xx.s        Startup code and vector table
+└── system.c                     System initialization
 ```
 
 ## Prerequisites
@@ -178,7 +188,7 @@ int main(void)
 }
 ```
 
-Open the board's COM port in a serial terminal (<!-- TODO: baud rate -->) to see the output.
+Open the board's COM port in a serial terminal (115200) to see the output.
 
 
 **Cédric Compaoré** ([@itsaxelc](https://github.com/itsaxelc)), Aerospace Engineering student at ENSA Safi.

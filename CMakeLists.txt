@@ -14,13 +14,18 @@ if(NOT EXISTS ${EXAMPLE_SOURCE})
 endif()
 message(STATUS "Building example: ${EXAMPLE}")
 
+# Top-level driver folders (their names contain a space: always keep them quoted)
+set(PROTOCOLS_DIR  "${CMAKE_SOURCE_DIR}/Communication protocols")
+set(SENSORS_DRIVERS_DIR "${CMAKE_SOURCE_DIR}/Sensors drivers")
+
 # Driver sources (re-run cmake if you add a new .c file)
 file(GLOB DRIVER_SOURCES CONFIGURE_DEPENDS
-    ${CMAKE_SOURCE_DIR}/I2C/*.c
-    ${CMAKE_SOURCE_DIR}/SPI/*.c
-    ${CMAKE_SOURCE_DIR}/UART/*.c
-    ${CMAKE_SOURCE_DIR}/MPU9250_driver/*.c
-    ${CMAKE_SOURCE_DIR}/lcd1602_driver/*.c
+    "${PROTOCOLS_DIR}/I2C/*.c"
+    "${PROTOCOLS_DIR}/SPI/*.c"
+    "${PROTOCOLS_DIR}/UART/*.c"
+    "${SENSORS_DRIVERS_DIR}/BME280/*.c"
+    "${SENSORS_DRIVERS_DIR}/MPU9250_driver/*.c"
+    "${SENSORS_DRIVERS_DIR}/lcd1602_driver/*.c"
 )
 
 add_executable(${PROJECT_NAME}
@@ -31,13 +36,17 @@ add_executable(${PROJECT_NAME}
 )
 
 # Both "i2c1.h" and "I2C/i2c1.h" style includes work with this
+# (same for sensors: "bme280.h" and "BME280/bme280.h")
 target_include_directories(${PROJECT_NAME} PRIVATE
-    ${CMAKE_SOURCE_DIR}
-    ${CMAKE_SOURCE_DIR}/I2C
-    ${CMAKE_SOURCE_DIR}/SPI
-    ${CMAKE_SOURCE_DIR}/UART
-    ${CMAKE_SOURCE_DIR}/MPU9250_driver
-    ${CMAKE_SOURCE_DIR}/lcd1602_driver
+    "${CMAKE_SOURCE_DIR}"
+    "${PROTOCOLS_DIR}"
+    "${PROTOCOLS_DIR}/I2C"
+    "${PROTOCOLS_DIR}/SPI"
+    "${PROTOCOLS_DIR}/UART"
+    "${SENSORS_DRIVERS_DIR}"
+    "${SENSORS_DRIVERS_DIR}/BME280"
+    "${SENSORS_DRIVERS_DIR}/MPU9250_driver"
+    "${SENSORS_DRIVERS_DIR}/lcd1602_driver"
 )
 
 target_compile_options(${PROJECT_NAME} PRIVATE
