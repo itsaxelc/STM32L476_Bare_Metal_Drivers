@@ -1,4 +1,4 @@
-# Communication Protocols
+# STM32L476 Bare Metal Drivers
 
 Bare-metal drivers for the main serial communication protocols (I2C, SPI, UART) on the **STM32L476RG**, with sensor and peripheral drivers built on top of them: an **MPU9250** 9-axis IMU (with its **AK8963** magnetometer), a **BME280** environmental sensor and an **LCD1602** character display (I2C backpack).
 
@@ -10,7 +10,7 @@ Written in C, with no HAL and no vendor libraries. Built with CMake and the GNU 
 - **SPI1** driver
 - **USART1 / USART2** drivers (USART2 tested over the ST-Link virtual COM port)
 - **MPU9250** driver (accelerometer, gyroscope, temperature) and **AK8963** magnetometer driver
-- **BME280** driver (temperature, pressure, humidity) over I2C
+- **BME280** driver (temperature, pressure, humidity) <!-- TODO: precise the bus used (I2C / SPI) -->
 - **LCD1602** driver over I2C, used as the validation target for the I2C driver
 - **Selectable pin mapping**: I2C1, I2C2 and SPI1 can be initialized on any of their supported pin combinations by passing an enum
 - Reproducible build with CMake presets and Ninja
@@ -66,7 +66,7 @@ On the NUCLEO-L476RG, USART2 (PA2/PA3) is connected to the ST-Link virtual COM p
 The drivers are split in two groups: the **communication protocols** (the low-level buses) and the **sensor drivers** (the devices that sit on top of those buses).
 
 ```
-Communication_Protocols/
+STM32L476_Bare_Metal_Drivers/
 ├── .vscode/                     VS Code debug configuration (Cortex-Debug + OpenOCD)
 ├── Communication protocols/     Low-level bus drivers
 │   ├── I2C/                     I2C1, I2C2, I2C3 drivers
@@ -109,8 +109,8 @@ openocd --version
 ## Build
 
 ```
-git clone https://github.com/itsaxelc/Communication_Protocols.git
-cd Communication_Protocols
+git clone https://github.com/itsaxelc/STM32L476_Bare_Metal_Drivers.git
+cd STM32L476_Bare_Metal_Drivers
 cmake --preset Debug -DEXAMPLE=lcd
 cmake --build --preset Debug
 ```
@@ -188,7 +188,7 @@ int main(void)
 }
 ```
 
-Open the board's COM port in a serial terminal (115200) to see the output.
+Open the board's COM port in a serial terminal (<!-- TODO: baud rate -->) to see the output.
 
 
 **Cédric Compaoré** ([@itsaxelc](https://github.com/itsaxelc)), Aerospace Engineering student at ENSA Safi.
