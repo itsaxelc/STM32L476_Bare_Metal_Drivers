@@ -112,64 +112,64 @@ delay
 0x0C   → display ON
 */
 
-I2C_Status LCD1602_Init(void)
+I2C_Status LCD1602_Init(I2C_Handle *hi2c)
 {
     /* Wait after power-on */
     LCD1602_Delay();
 
     I2C_Status status;
     /* Initialize HD44780 in 4-bit mode */
-    status=LCD1602_Write4Bits(0x03U, 0);
+    status=LCD1602_Write4Bits(hi2c, 0x03U, 0);
     if(status != I2C_OK){
         return status;
     }
     LCD1602_Delay();
 
-    status=LCD1602_Write4Bits(0x03U, 0);
+    status=LCD1602_Write4Bits(hi2c, 0x03U, 0);
     if(status != I2C_OK){
         return status;
     }
     LCD1602_Delay();
 
-    status=LCD1602_Write4Bits(0x03U, 0);
+    status=LCD1602_Write4Bits(hi2c, 0x03U, 0);
     if(status != I2C_OK){
         return status;
     }
     LCD1602_Delay();
 
-    status=LCD1602_Write4Bits(0x02U, 0);
+    status=LCD1602_Write4Bits(hi2c, 0x02U, 0);
     if(status != I2C_OK){
         return status;
     }
     LCD1602_Delay();
 
     /* 4-bit mode, 2 lines, 5x8 font */
-    status=LCD1602_SendCommand(0x28U);
+    status=LCD1602_SendCommand(hi2c, 0x28U);
     if(status != I2C_OK){
         return status;
     }
 
     /* Display OFF, cursor OFF, blink OFF */
-    status=LCD1602_SendCommand(0x08U);
+    status=LCD1602_SendCommand(hi2c, 0x08U);
     if(status != I2C_OK){
         return status;
     }
 
     /* Clear display */
-    status=LCD1602_SendCommand(0x01U);
+    status=LCD1602_SendCommand(hi2c, 0x01U);
     if(status != I2C_OK){
         return status;
     }
     LCD1602_Delay();
 
     /* Entry mode: cursor moves right */
-    status=LCD1602_SendCommand(0x06U);
+    status=LCD1602_SendCommand(hi2c, 0x06U);
     if(status != I2C_OK){
         return status;
     }
 
     /* Display ON, cursor OFF, blink OFF */
-    status=LCD1602_SendCommand(0x0CU);
+    status=LCD1602_SendCommand(hi2c, 0x0CU);
     if(status != I2C_OK)
     {
         return status;
@@ -178,13 +178,13 @@ I2C_Status LCD1602_Init(void)
     return I2C_OK;
 }
 
-void LCD1602_Clear(void)
+void LCD1602_Clear(I2C_Handle *hi2c)
 {
-    I2C_Status status= LCD1602_SendCommand(0x01U);
+    I2C_Status status= LCD1602_SendCommand(hi2c, 0x01U);
     if(status != I2C_OK) return;
 }
 
-void LCD1602_SetCursor(uint8_t row, uint8_t column)
+void LCD1602_SetCursor(I2C_Handle *hi2c, uint8_t row, uint8_t column)
 {
     if(row > MAX_ROW || column > MAX_COLUMN)
     {
@@ -198,21 +198,21 @@ void LCD1602_SetCursor(uint8_t row, uint8_t column)
     else
         address = 0x40U + column;
 
-    I2C_Status status= LCD1602_SendCommand(0x80U | address);
+    I2C_Status status= LCD1602_SendCommand(hi2c, 0x80U | address);
     if(status != I2C_OK) return;
 }
 
-void LCD1602_WriteChar(char c)
+void LCD1602_WriteChar(I2C_Handle *hi2c, char c)
 {
-    I2C_Status status= LCD1602_SendData((uint8_t)c);
+    I2C_Status status= LCD1602_SendData(hi2c, (uint8_t)c);
     if(status != I2C_OK) return;
 }
 
-void LCD1602_WriteString(const char *str)
+void LCD1602_WriteString(I2C_Handle *hi2c, const char *str)
 {
     while (*str != '\0')
     {
-        LCD1602_WriteChar(*str);
+        LCD1602_WriteChar(hi2c, *str);
         str++;
     }
 }

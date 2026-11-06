@@ -19,10 +19,10 @@
 #define LCD_D6        (1U << 6)   // P6
 #define LCD_D7        (1U << 7)   // P7
 
-I2C_Status LCD1602_Init(void);
-void LCD1602_Clear(void);
-void LCD1602_SetCursor(uint8_t row, uint8_t column);
-void LCD1602_WriteChar(char c);
-void LCD1602_WriteString(const char *str);
+I2C_Status LCD1602_Init(I2C_Handle *hi2c);
+void LCD1602_Clear(I2C_Handle *hi2c);
+void LCD1602_SetCursor(I2C_Handle *hi2c, uint8_t row, uint8_t column);
+void LCD1602_WriteChar(I2C_Handle *hi2c, char c);
+void LCD1602_WriteString(I2C_Handle *hi2c, const char *str);
 
 #endif

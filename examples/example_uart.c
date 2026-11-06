@@ -1,9 +1,9 @@
 #include <stdint.h>
-#include "UART/usart2.h"
+#include "uart.h"
 
 int main(void)
 {
-    USART2_Init();
+    USART_Init();
 
     while (1)
     {
