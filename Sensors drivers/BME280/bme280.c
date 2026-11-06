@@ -1,5 +1,4 @@
 #include "bme280.h"
-#include "i2c1.h"
 #include <stddef.h>
 #include <string.h>
 
@@ -85,7 +84,7 @@ static BME280_Status BME280_ReadRegisters(BME280_Handle *dev, uint8_t reg, uint8
     {
         return BME280_ERROR_INVALID_PARAM;
     }
-    I2C_Status status = I2C1_WriteRead(dev->address, &reg, 1U, data, length);
+    I2C_Status status = I2C_WriteRead(&dev->hi2c, dev->address, &reg, 1U, data, length);
     if (status != I2C_OK)
     {
         return BME280_ERROR_BUS;
@@ -105,7 +104,7 @@ static BME280_Status BME280_WriteRegister(BME280_Handle *dev,uint8_t reg,uint8_t
         return BME280_ERROR_INVALID_PARAM;
     }
     uint8_t buffer[2] = {reg, value};
-    I2C_Status status = I2C1_Write(dev->address,buffer,2U);
+    I2C_Status status = I2C_Write(&dev->hi2c, dev->address,buffer,2U);
 
     if (status != I2C_OK)
     {

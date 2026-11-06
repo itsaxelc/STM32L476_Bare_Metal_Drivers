@@ -2,6 +2,7 @@
 #define BME280_H
 
 #include <stdint.h>
+#include "i2c.h"
 
 
 /* I2C 7-bit addresses */
@@ -149,6 +150,7 @@ typedef struct
 typedef struct
 {
     uint8_t address;
+    I2C_Handle hi2c;
 
     BME280_Calibration calib;
     BME280_Config config;
