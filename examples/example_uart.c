@@ -3,11 +3,13 @@
 
 int main(void)
 {
-    USART_Init();
+    UART_Handle huart;
+    UART_Instance instance = UART_INSTANCE_2;
+    UART_Init(&huart, instance);
 
     while (1)
     {
-        USART2_TransmitString("hello from USART2\r\n");
+        UART_TransmitString(&huart, "hello from USART2\r\n");
         for (volatile uint32_t i = 0U; i < 500000U; i++);
     }
 }
