@@ -1,4 +1,5 @@
 #include "lcd1602.h"
+#include <stddef.h>
 
 /*  P7 P6 P5 P4 P3 P2 P1 P0 
     0  1  0  1  1  0  0  1
@@ -114,6 +115,7 @@ delay
 
 I2C_Status LCD1602_Init(I2C_Handle *hi2c)
 {
+    if (hi2c == NULL || hi2c->instance == NULL) return I2C_ERROR;
     /* Wait after power-on */
     LCD1602_Delay();
 
@@ -145,21 +147,16 @@ I2C_Status LCD1602_Init(I2C_Handle *hi2c)
 
     /* 4-bit mode, 2 lines, 5x8 font */
     status=LCD1602_SendCommand(hi2c, 0x28U);
-    if(status != I2C_OK){
-        return status;
-    }
+    if(status != I2C_OK) return status;
 
     /* Display OFF, cursor OFF, blink OFF */
     status=LCD1602_SendCommand(hi2c, 0x08U);
-    if(status != I2C_OK){
-        return status;
-    }
+    if(status != I2C_OK) return status;
 
     /* Clear display */
     status=LCD1602_SendCommand(hi2c, 0x01U);
-    if(status != I2C_OK){
-        return status;
-    }
+    if(status != I2C_OK) return status;
+
     LCD1602_Delay();
 
     /* Entry mode: cursor moves right */
@@ -174,7 +171,6 @@ I2C_Status LCD1602_Init(I2C_Handle *hi2c)
     {
         return status;
     }
-
     return I2C_OK;
 }
 
@@ -190,13 +186,10 @@ void LCD1602_SetCursor(I2C_Handle *hi2c, uint8_t row, uint8_t column)
     {
         return;
     }
-    
     uint8_t address;
 
-    if (row == 0)
-        address = 0x00U + column;
-    else
-        address = 0x40U + column;
+    if (row == 0) address = 0x00U + column;
+    else address = 0x40U + column;
 
     I2C_Status status= LCD1602_SendCommand(hi2c, 0x80U | address);
     if(status != I2C_OK) return;
@@ -204,12 +197,14 @@ void LCD1602_SetCursor(I2C_Handle *hi2c, uint8_t row, uint8_t column)
 
 void LCD1602_WriteChar(I2C_Handle *hi2c, char c)
 {
+    if (hi2c == NULL || hi2c->instance == NULL) return;
     I2C_Status status= LCD1602_SendData(hi2c, (uint8_t)c);
     if(status != I2C_OK) return;
 }
 
 void LCD1602_WriteString(I2C_Handle *hi2c, const char *str)
 {
+    if (hi2c == NULL || hi2c->instance == NULL) return;
     while (*str != '\0')
     {
         LCD1602_WriteChar(hi2c, *str);

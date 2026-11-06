@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-/* I2C register layout. Reserved fields preserve the hardware register offsets */
+/* I2C register layout. Reserved fields are used to preserve the hardware register offsets */
 
 typedef struct
 {

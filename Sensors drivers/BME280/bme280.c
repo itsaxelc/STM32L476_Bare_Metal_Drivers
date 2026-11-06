@@ -250,14 +250,13 @@ static BME280_Status BME280_Configure(BME280_Handle *dev)
 
 /* Initialization */
 
-BME280_Status BME280_Init(BME280_Handle *dev, uint8_t address, const BME280_Config *config)
+BME280_Status BME280_Init(BME280_Handle *dev, const I2C_Handle *hi2c, uint8_t address, const BME280_Config *config)
 {
     uint8_t chip_id;
     BME280_Status result;
     BME280_Config default_config;
 
-    if (dev == NULL) return BME280_ERROR_INVALID_PARAM;
-
+    if (dev == NULL || hi2c == NULL || hi2c->instance == NULL) return BME280_ERROR_INVALID_PARAM;
     if (address != BME280_I2C_ADDR_PRIMARY && address != BME280_I2C_ADDR_SECONDARY)
         return BME280_ERROR_INVALID_PARAM;
 
@@ -274,6 +273,7 @@ BME280_Status BME280_Init(BME280_Handle *dev, uint8_t address, const BME280_Conf
     /* Initialize the handle before the first bus transaction */
     memset(dev, 0, sizeof(*dev));
 
+    dev->hi2c = *hi2c;
     dev->address= address;
     dev->config= *config;
 

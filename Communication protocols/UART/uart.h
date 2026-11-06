@@ -3,10 +3,9 @@
 
 #include <stdint.h>
 
-/* ============================================================
- * USART peripheral register layout (STM32L476xx)
- * Reserved fields preserve the offsets of registers used below.
- * ============================================================ */
+/* USART peripheral register layout (STM32L476xx)
+    Reserved fields preserve the offsets of registers used below.
+*/
 
 typedef struct
 {
@@ -20,23 +19,17 @@ typedef struct
     volatile uint32_t ICR;          /* Offset: 0x20 */
     volatile uint32_t RDR;          /* Offset: 0x24 */
     volatile uint32_t TDR;          /* Offset: 0x28 */
-
 } UART_Registers;
 
-/* ============================================================
- * Supported USART instances
- * ============================================================ */
+/* Supported USART instances */
 
 typedef enum
 {
     UART_INSTANCE_1 = 1,
     UART_INSTANCE_2 = 2
-
 } UART_Instance;
 
-/* ============================================================
- * Driver status
- * ============================================================ */
+/* Driver status */
 
 typedef enum
 {
@@ -46,28 +39,17 @@ typedef enum
 
 } UART_Status;
 
-/* ============================================================
- * Handle
- * The driver fills instance during UART_Init().
- * Application code does not provide peripheral addresses.
- * ============================================================ */
+/* Handle: The driver fills instance during UART_Init() */
 
 typedef struct
 {
     UART_Registers *instance;
-
 } UART_Handle;
 
-/* ============================================================
- * Public API
- *
- * UART_Init uses the pin mapping from the former drivers:
- *   USART1: PA9 (TX), PA10 (RX), AF7
- *   USART2: PA2 (TX), PA3 (RX), AF7
- *
- * Both instances retain the original BRR value (35) and select
- * their peripheral bus clock, matching the previous implementation.
- * ============================================================ */
+/* Public API
+    USART1: PA9 (TX), PA10 (RX), AF7
+    USART2: PA2 (TX), PA3 (RX), AF7
+*/
 
 UART_Status UART_Init(UART_Handle *huart, UART_Instance instance);
 UART_Status UART_Write(UART_Handle *huart, uint8_t data);

@@ -164,7 +164,7 @@ typedef struct
 void BME280_GetDefaultConfig(BME280_Config *config);
 
 /* Initialize, reset, identify, read calibration and configure */
-BME280_Status BME280_Init(BME280_Handle *dev, uint8_t address, const BME280_Config *config);
+BME280_Status BME280_Init(BME280_Handle *dev, const I2C_Handle *hi2c, uint8_t address, const BME280_Config *config);
 
 /* Read uncompensated data */
 BME280_Status BME280_ReadRawData(BME280_Handle *dev, BME280_RawData *raw);
