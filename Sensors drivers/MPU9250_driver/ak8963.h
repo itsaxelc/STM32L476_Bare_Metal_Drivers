@@ -2,7 +2,7 @@
 #define AK8963_H
 
 #include <stdint.h>
-#include "i2c1.h"
+#include "i2c.h"
 
 
 #define AK8963_I2C_ADDRESS                          0x0CU
@@ -53,8 +53,8 @@ typedef struct{
     float HZ;
 } AK8963_Data;
 
-I2C_Status AK8963_Init(void);
-I2C_Status AK8963_ReadWhoAmI(uint8_t *id);
-I2C_Status AK8963_GetData(AK8963_Data *data);
+I2C_Status AK8963_Init(I2C_Handle *hi2c);
+I2C_Status AK8963_ReadWhoAmI(I2C_Handle *hi2c, uint8_t *id);
+I2C_Status AK8963_GetData(I2C_Handle *hi2c, AK8963_Data *data);
 
 #endif

@@ -2,7 +2,7 @@
 #define LCD1602_H
 
 #include <stdint.h>
-#include "i2c1.h"
+#include "i2c.h"
 
 #define LCD1602_I2C_ADDRESS     0x27U
 // #define LCD1602_I2C_ADDRESS     0x3FU

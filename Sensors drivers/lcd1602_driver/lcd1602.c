@@ -1,5 +1,6 @@
 #include "lcd1602.h"
 
+I2C_Handle *hi2c1;
 /*  P7 P6 P5 P4 P3 P2 P1 P0 
     0  1  0  1  1  0  0  1
 sera interprété par le PCF8574 comme :
@@ -8,7 +9,7 @@ sera interprété par le PCF8574 comme :
  */
 static I2C_Status LCD1602_WritePCF8574(uint8_t value)
 {
-    return I2C1_Write(LCD1602_I2C_ADDRESS, &value, 1);
+    return I2C_Write(hi2c1, LCD1602_I2C_ADDRESS, &value, 1);
 }
 /*
 E = 0 → placer les données sur D4-D7
@@ -24,8 +25,7 @@ static I2C_Status LCD1602_PulseEnable(uint8_t value)
     /* E = 1 */
     status = LCD1602_WritePCF8574(value | LCD_E);
 
-    if (status != I2C_OK)
-        return status;
+    if (status != I2C_OK) return status;
 
     /* E = 0 */
     status = LCD1602_WritePCF8574(value & ~LCD_E);
@@ -40,9 +40,7 @@ static I2C_Status LCD1602_Write4Bits(uint8_t nibble, uint8_t rs)
 {
     uint8_t value = LCD_BACKLIGHT;
 
-    if (rs)
-        value |= LCD_RS;
-
+    if (rs) value |= LCD_RS;
     value |= (nibble & 0x0FU) << 4;
 
     return LCD1602_PulseEnable(value);
@@ -59,8 +57,7 @@ static I2C_Status LCD1602_WriteByte(uint8_t value, uint8_t rs)
 
     status = LCD1602_Write4Bits(value >> 4, rs);
 
-    if (status != I2C_OK)
-        return status;
+    if (status != I2C_OK) return status;
 
     status = LCD1602_Write4Bits(value & 0x0FU, rs);
 
@@ -178,6 +175,8 @@ I2C_Status LCD1602_Init(void)
     {
         return status;
     }
+
+    return I2C_OK;
 }
 
 void LCD1602_Clear(void)
